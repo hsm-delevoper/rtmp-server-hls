@@ -1,0 +1,18 @@
+version: '3'
+services:
+  node:
+    build: .
+    ports:
+      - "1935:1935"
+      - "8000:8000"
+    depends_on:
+      - python
+    environment:
+      - NODE_ENV=production
+  python:
+    build: ./app
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=production

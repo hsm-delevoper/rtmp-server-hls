@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTMP to HLS Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>RTMP to HLS Converter</h1>
+    <form id="stream-form">
+        <label for="stream-url">Enter the RTMP stream URL:</label>
+        <input type="text" id="stream-url" name="stream_url">
+        <button type="submit">Convert to HLS</button>
+    </form>
+    <div id="output"></div>
+
+    <script>
+        const form = document.getElementById('stream-form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const streamUrl = document.getElementById('stream-url').value;
+            try {
+                const response = await fetch('/stream', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ stream_url: streamUrl })
+                });
+                const data = await response.json();
+                document.getElementById('output').innerHTML = `Stream converted successfully! <a href="${data.stream_url}">Download HLS stream</a>`;
+            } catch (error) {
+                console.error(error);
+                document.getElementById('output').innerHTML = 'Error converting stream';
+            }
+        });
+    </script>
+</body>
+</html>
